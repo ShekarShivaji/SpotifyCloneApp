@@ -1,5 +1,5 @@
 .home-loading-container {
-  width: 90%;
+  width: 95%;
   height: 300px;
   background-color: #040306;
   border-radius: 10px;
@@ -11,7 +11,7 @@
 }
 
 @media screen and (min-width: 426px) {
-  .home-failuar-container {
+  .home-loading-container {
     height: 500px;
   }
 }

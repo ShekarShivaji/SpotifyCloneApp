@@ -1,5 +1,5 @@
 .home-failuar-container {
-  width: 90%;
+  width: 95%;
   height: 300px;
   background-color: #040306;
   border-radius: 10px;
@@ -30,6 +30,7 @@
   border-radius: 3px;
   border: none;
   outline: none;
+  cursor: pointer;
 }
 
 @media screen and (min-width: 426px) {

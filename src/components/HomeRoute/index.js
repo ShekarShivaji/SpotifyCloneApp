@@ -10,15 +10,20 @@ import Loading from '../Loading/index'
 
 class HomeRoute extends Component {
   state = {
+    isLoadingHome: true,
     isLoading: true,
-    error: null,
+    error1: null,
+    error2: null,
+    error3: null,
     featuredPlaylists: [],
     categoriesList: [],
     newReleasesList: [],
   }
 
   componentDidMount() {
-    this.getData()
+    this.getEditorsPickData()
+    this.getGenreAndMoodsData()
+    this.getNewReleasesData()
   }
 
   updateData1 = data1 => {
@@ -54,7 +59,7 @@ class HomeRoute extends Component {
     return updatedData
   }
 
-  getData = async () => {
+  getEditorsPickData = async () => {
     this.setState({isLoading: true})
     const jwtToken = Cookies.get('jwt_token')
     const options = {
@@ -64,27 +69,73 @@ class HomeRoute extends Component {
       method: 'GET',
     }
     try {
-      const [response1, response2, response3] = await Promise.all([
-        fetch(
-          'https://apis2.ccbp.in/spotify-clone/featured-playlists',
-          options,
-        ),
-        fetch('https://apis2.ccbp.in/spotify-clone/categories', options),
-        fetch('https://apis2.ccbp.in/spotify-clone/new-releases', options),
-      ])
+      const response1 = await fetch(
+        'https://apis2.ccbp.in/spotify-clone/featured-playlists',
+        options,
+      )
+      if (response1.ok === true) {
+        const data1 = await response1.json()
+        this.setState({
+          featuredPlaylists: this.updateData1(data1),
+          isLoadingHome: false,
+          isLoading: false,
+        })
+      }
+    } catch (error1) {
+      this.setState({error1, isLoading: false})
+    }
+  }
 
-      const data1 = await response1.json()
-      const data2 = await response2.json()
-      const data3 = await response3.json()
+  getGenreAndMoodsData = async () => {
+    this.setState({isLoading: true})
+    const jwtToken = Cookies.get('jwt_token')
+    const options = {
+      headers: {
+        Authorization: `Bearer ${jwtToken}`,
+      },
+      method: 'GET',
+    }
+    try {
+      const response2 = await fetch(
+        'https://apis2.ccbp.in/spotify-clone/categories',
+        options,
+      )
+      if (response2.ok === true) {
+        const data2 = await response2.json()
+        this.setState({
+          categoriesList: this.updateData2(data2),
+          isLoading: false,
+        })
+      }
+    } catch (error2) {
+      this.setState({error2, isLoading: false})
+    }
+  }
 
-      this.setState({
-        featuredPlaylists: this.updateData1(data1),
-        categoriesList: this.updateData2(data2),
-        newReleasesList: this.updateData3(data3),
-        isLoading: false,
-      })
-    } catch (error) {
-      this.setState({error, isLoading: false})
+  getNewReleasesData = async () => {
+    this.setState({isLoading: true})
+    const jwtToken = Cookies.get('jwt_token')
+    const options = {
+      headers: {
+        Authorization: `Bearer ${jwtToken}`,
+      },
+      method: 'GET',
+    }
+    try {
+      const response3 = await fetch(
+        'https://apis2.ccbp.in/spotify-clone/new-releases',
+        options,
+      )
+
+      if (response3.ok === true) {
+        const data3 = await response3.json()
+        this.setState({
+          newReleasesList: this.updateData3(data3),
+          isLoading: false,
+        })
+      }
+    } catch (error3) {
+      this.setState({error3, isLoading: false})
     }
   }
 
@@ -93,12 +144,15 @@ class HomeRoute extends Component {
       featuredPlaylists,
       newReleasesList,
       categoriesList,
-      error,
+      error1,
+      error2,
+      error3,
       isLoading,
+      isLoadingHome,
     } = this.state
     return (
       <div className="home-bg-container" data-testid="homeBgContainer">
-        {isLoading ? (
+        {isLoadingHome ? (
           <div className="loading-view">
             <img
               src="https://res.cloudinary.com/dqkjtjb9x/image/upload/v1740494566/Vector_anoy5d.png"
@@ -111,56 +165,60 @@ class HomeRoute extends Component {
           <>
             <Navbar />
             <div className="container">
-              <h1 className="headings">Editors Picks</h1>
-              {isLoading ? (
-                <Loading />
-              ) : (
-                <>
-                  {error !== null ? (
-                    <HomeFailuar getData={this.getData} />
-                  ) : (
-                    <ul className="list-item-container">
-                      {featuredPlaylists.map(item => (
-                        <FeaturedPlaylistsItems item={item} key={item.id} />
-                      ))}
-                    </ul>
-                  )}
-                </>
-              )}
-
-              <h1 className="headings">Genres & Moods</h1>
-              {isLoading ? (
-                <Loading />
-              ) : (
-                <>
-                  {error !== null ? (
-                    <HomeFailuar getData={this.getData} />
-                  ) : (
-                    <ul className="list-item-container">
-                      {categoriesList.map(item => (
-                        <CategoriesListItems item={item} key={item.id} />
-                      ))}
-                    </ul>
-                  )}
-                </>
-              )}
-
-              <h1 className="headings">New releases</h1>
-              {isLoading ? (
-                <Loading />
-              ) : (
-                <>
-                  {error !== null ? (
-                    <HomeFailuar getData={this.getData} />
-                  ) : (
-                    <ul className="list-item-container">
-                      {newReleasesList.map(item => (
-                        <NewReleasesListItems item={item} key={item.id} />
-                      ))}
-                    </ul>
-                  )}
-                </>
-              )}
+              <div data-testid="loader">
+                <h1 className="headings">Editors Picks</h1>
+                {isLoading ? (
+                  <Loading />
+                ) : (
+                  <>
+                    {error1 !== null ? (
+                      <HomeFailuar getData={this.getEditorsPickData} />
+                    ) : (
+                      <ul className="list-item-container">
+                        {featuredPlaylists.map(item => (
+                          <FeaturedPlaylistsItems item={item} key={item.id} />
+                        ))}
+                      </ul>
+                    )}
+                  </>
+                )}
+              </div>
+              <div data-testid="loader">
+                <h1 className="headings">Genres & Moods</h1>
+                {isLoading ? (
+                  <Loading />
+                ) : (
+                  <>
+                    {error2 !== null ? (
+                      <HomeFailuar getData={this.getGenreAndMoodsData} />
+                    ) : (
+                      <ul className="list-item-container">
+                        {categoriesList.map(item => (
+                          <CategoriesListItems item={item} key={item.id} />
+                        ))}
+                      </ul>
+                    )}
+                  </>
+                )}
+              </div>
+              <div data-testid="loader">
+                <h1 className="headings">New releases</h1>
+                {isLoading ? (
+                  <Loading />
+                ) : (
+                  <>
+                    {error3 !== null ? (
+                      <HomeFailuar getData={this.getNewReleasesData} />
+                    ) : (
+                      <ul className="list-item-container">
+                        {newReleasesList.map(item => (
+                          <NewReleasesListItems item={item} key={item.id} />
+                        ))}
+                      </ul>
+                    )}
+                  </>
+                )}
+              </div>
             </div>
           </>
         )}
