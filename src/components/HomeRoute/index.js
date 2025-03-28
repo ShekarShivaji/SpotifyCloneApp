@@ -1,10 +1,12 @@
 import './index.css'
 import {Component} from 'react'
+import Cookies from 'js-cookie'
 import Navbar from '../Navbar/index'
 import FeaturedPlaylistsItems from '../FeaturedPlaylistsItems/index'
 import HomeFailuar from '../HomeFailuar/index'
 import CategoriesListItems from '../CategoriesListItems/index'
 import NewReleasesListItems from '../NewReleasesListItems/index'
+import Loading from '../Loading/index'
 
 class HomeRoute extends Component {
   state = {
@@ -54,11 +56,21 @@ class HomeRoute extends Component {
 
   getData = async () => {
     this.setState({isLoading: true})
+    const jwtToken = Cookies.get('jwt_token')
+    const options = {
+      headers: {
+        Authorization: `Bearer ${jwtToken}`,
+      },
+      method: 'GET',
+    }
     try {
       const [response1, response2, response3] = await Promise.all([
-        fetch('https://apis2.ccbp.in/spotify-clone/featured-playlists'),
-        fetch('https://apis2.ccbp.in/spotify-clone/categories'),
-        fetch('https://apis2.ccbp.in/spotify-clone/new-releases'),
+        fetch(
+          'https://apis2.ccbp.in/spotify-clone/featured-playlists',
+          options,
+        ),
+        fetch('https://apis2.ccbp.in/spotify-clone/categories', options),
+        fetch('https://apis2.ccbp.in/spotify-clone/new-releases', options),
       ])
 
       const data1 = await response1.json()
@@ -90,7 +102,7 @@ class HomeRoute extends Component {
           <div className="loading-view">
             <img
               src="https://res.cloudinary.com/dqkjtjb9x/image/upload/v1740494566/Vector_anoy5d.png"
-              alt="website logo"
+              alt="logo"
               className="logo-img"
             />
             <h1 className="loading-text">Loading...</h1>
@@ -99,35 +111,55 @@ class HomeRoute extends Component {
           <>
             <Navbar />
             <div className="container">
-              <h1 className="headings">Editors picks</h1>
-              {error !== null ? (
-                <HomeFailuar getData={this.getData} />
+              <h1 className="headings">Editors Picks</h1>
+              {isLoading ? (
+                <Loading />
               ) : (
-                <ul className="list-item-container" data-testid="loader">
-                  {featuredPlaylists.map(item => (
-                    <FeaturedPlaylistsItems item={item} key={item.id} />
-                  ))}
-                </ul>
+                <>
+                  {error !== null ? (
+                    <HomeFailuar getData={this.getData} />
+                  ) : (
+                    <ul className="list-item-container">
+                      {featuredPlaylists.map(item => (
+                        <FeaturedPlaylistsItems item={item} key={item.id} />
+                      ))}
+                    </ul>
+                  )}
+                </>
               )}
+
               <h1 className="headings">Genres & Moods</h1>
-              {error !== null ? (
-                <HomeFailuar getData={this.getData} />
+              {isLoading ? (
+                <Loading />
               ) : (
-                <ul className="list-item-container" data-testid="loader">
-                  {categoriesList.map(item => (
-                    <CategoriesListItems item={item} key={item.id} />
-                  ))}
-                </ul>
+                <>
+                  {error !== null ? (
+                    <HomeFailuar getData={this.getData} />
+                  ) : (
+                    <ul className="list-item-container">
+                      {categoriesList.map(item => (
+                        <CategoriesListItems item={item} key={item.id} />
+                      ))}
+                    </ul>
+                  )}
+                </>
               )}
+
               <h1 className="headings">New releases</h1>
-              {error !== null ? (
-                <HomeFailuar getData={this.getData} />
+              {isLoading ? (
+                <Loading />
               ) : (
-                <ul className="list-item-container" data-testid="loader">
-                  {newReleasesList.map(item => (
-                    <NewReleasesListItems item={item} key={item.id} />
-                  ))}
-                </ul>
+                <>
+                  {error !== null ? (
+                    <HomeFailuar getData={this.getData} />
+                  ) : (
+                    <ul className="list-item-container">
+                      {newReleasesList.map(item => (
+                        <NewReleasesListItems item={item} key={item.id} />
+                      ))}
+                    </ul>
+                  )}
+                </>
               )}
             </div>
           </>

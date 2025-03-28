@@ -1,4 +1,5 @@
 import './index.css'
+import {Link} from 'react-router-dom'
 import Navbar from '../Navbar/index'
 
 const NotFound = () => (
@@ -12,6 +13,9 @@ const NotFound = () => (
           className="page-not-found-img"
         />
         <h1 className="page-not-found-text">Page Not Found</h1>
+        <Link to="/">
+          <button type="button">Home Page</button>
+        </Link>
       </div>
     </div>
   </div>

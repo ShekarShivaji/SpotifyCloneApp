@@ -1,7 +1,7 @@
 import './index.css'
 import {Component} from 'react'
 import Cookies from 'js-cookie'
-import {Redirect, withRouter} from 'react-router-dom'
+import {Redirect} from 'react-router-dom'
 
 class LoginRoute extends Component {
   state = {
