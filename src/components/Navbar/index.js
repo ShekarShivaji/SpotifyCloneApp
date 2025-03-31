@@ -7,7 +7,7 @@ const Navbar = props => {
   const logutButton = () => {
     Cookies.remove('jwt_token')
     const {history} = props
-    history.replace('./login')
+    history.replace('/login')
   }
   return (
     <nav className="nav-container">
