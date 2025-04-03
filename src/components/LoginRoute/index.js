@@ -91,7 +91,7 @@ class LoginRoute extends Component {
       return <Redirect to="/" />
     }
     return (
-      <div className="login-form-container">
+      <div className="login-form-container" data-testid="loginFormContainer">
         <form className="form-container" onSubmit={this.submitForm}>
           <img
             src="https://res.cloudinary.com/dqkjtjb9x/image/upload/v1740494566/Vector_anoy5d.png"

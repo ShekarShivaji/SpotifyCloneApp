@@ -5,12 +5,13 @@ const FeaturedPlaylistsItems = props => {
   const {item} = props
   const {id, image, name} = item
   return (
-    <li className="playlistItem">
-      <Link className="list-Style" to={`/playlists-details/${id}`}>
+    <Link className="list-Style" to={`/playlists-details/${id}`}>
+      <li className="playlistItem">
         <img src={image} alt="featured playlist" className="playlistimage" />
-      </Link>
-      <p className="playlistname">{name}</p>
-    </li>
+
+        <p className="playlistname">{name}</p>
+      </li>
+    </Link>
   )
 }
 

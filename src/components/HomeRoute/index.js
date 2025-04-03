@@ -1,6 +1,7 @@
 import './index.css'
 import {Component} from 'react'
 import Cookies from 'js-cookie'
+import {Redirect} from 'react-router-dom'
 import Navbar from '../Navbar/index'
 import FeaturedPlaylistsItems from '../FeaturedPlaylistsItems/index'
 import HomeFailuar from '../HomeFailuar/index'
@@ -10,8 +11,9 @@ import Loading from '../Loading/index'
 
 class HomeRoute extends Component {
   state = {
-    isLoadingHome: true,
-    isLoading: true,
+    isLoadingEditorsPick: true,
+    isLoadingCategories: true,
+    isLoadingNewReleases: true,
     error1: null,
     error2: null,
     error3: null,
@@ -60,7 +62,7 @@ class HomeRoute extends Component {
   }
 
   getEditorsPickData = async () => {
-    this.setState({isLoading: true})
+    this.setState({isLoadingEditorsPick: true})
     const jwtToken = Cookies.get('jwt_token')
     const options = {
       headers: {
@@ -77,17 +79,16 @@ class HomeRoute extends Component {
         const data1 = await response1.json()
         this.setState({
           featuredPlaylists: this.updateData1(data1),
-          isLoadingHome: false,
-          isLoading: false,
+          isLoadingEditorsPick: false,
         })
       }
     } catch (error1) {
-      this.setState({error1, isLoading: false})
+      this.setState({error1, isLoadingEditorsPick: false})
     }
   }
 
   getGenreAndMoodsData = async () => {
-    this.setState({isLoading: true})
+    this.setState({isLoadingCategories: true})
     const jwtToken = Cookies.get('jwt_token')
     const options = {
       headers: {
@@ -104,16 +105,16 @@ class HomeRoute extends Component {
         const data2 = await response2.json()
         this.setState({
           categoriesList: this.updateData2(data2),
-          isLoading: false,
+          isLoadingCategories: false,
         })
       }
     } catch (error2) {
-      this.setState({error2, isLoading: false})
+      this.setState({error2, isLoadingCategories: false})
     }
   }
 
   getNewReleasesData = async () => {
-    this.setState({isLoading: true})
+    this.setState({isLoadingNewReleases: true})
     const jwtToken = Cookies.get('jwt_token')
     const options = {
       headers: {
@@ -131,97 +132,94 @@ class HomeRoute extends Component {
         const data3 = await response3.json()
         this.setState({
           newReleasesList: this.updateData3(data3),
-          isLoading: false,
+          isLoadingNewReleases: false,
         })
       }
     } catch (error3) {
-      this.setState({error3, isLoading: false})
+      this.setState({error3, isLoadingNewReleases: false})
     }
   }
 
-  render() {
+  renderEditorsPicksList = () => {
+    const {featuredPlaylists, error1} = this.state
+    return (
+      <>
+        <h1 className="headings">Editor&apos;s picks</h1>
+        {error1 ? (
+          <HomeFailuar getData={this.getEditorsPickData} />
+        ) : (
+          <ul className="list-item-container">
+            {featuredPlaylists.map(item => (
+              <FeaturedPlaylistsItems item={item} key={item.id} />
+            ))}
+          </ul>
+        )}
+      </>
+    )
+  }
+
+  renderGenresAndMoodList = () => {
+    const {categoriesList, error2} = this.state
+    return (
+      <>
+        <h1 className="headings">Genres & Moods</h1>
+        {error2 ? (
+          <HomeFailuar getData={this.getGenreAndMoodsData} />
+        ) : (
+          <ul className="list-item-container">
+            {categoriesList.map(item => (
+              <CategoriesListItems item={item} key={item.id} />
+            ))}
+          </ul>
+        )}
+      </>
+    )
+  }
+
+  renderNewReleasesList = () => {
+    const {newReleasesList, error3} = this.state
+    return (
+      <>
+        <h1 className="headings">New releases</h1>
+        {error3 ? (
+          <HomeFailuar getData={this.getNewReleasesData} />
+        ) : (
+          <ul className="list-item-container">
+            {newReleasesList.map(item => (
+              <NewReleasesListItems item={item} key={item.id} />
+            ))}
+          </ul>
+        )}
+      </>
+    )
+  }
+
+  renderHomeView = () => {
     const {
-      featuredPlaylists,
-      newReleasesList,
-      categoriesList,
-      error1,
-      error2,
-      error3,
-      isLoading,
-      isLoadingHome,
+      isLoadingEditorsPick,
+      isLoadingCategories,
+      isLoadingNewReleases,
     } = this.state
     return (
-      <div className="home-bg-container" data-testid="homeBgContainer">
-        {isLoadingHome ? (
-          <div className="loading-view">
-            <img
-              src="https://res.cloudinary.com/dqkjtjb9x/image/upload/v1740494566/Vector_anoy5d.png"
-              alt="logo"
-              className="logo-img"
-            />
-            <h1 className="loading-text">Loading...</h1>
-          </div>
-        ) : (
-          <>
-            <Navbar />
-            <div className="container">
-              <div data-testid="loader">
-                <h1 className="headings">Editors Picks</h1>
-                {isLoading ? (
-                  <Loading />
-                ) : (
-                  <>
-                    {error1 !== null ? (
-                      <HomeFailuar getData={this.getEditorsPickData} />
-                    ) : (
-                      <ul className="list-item-container">
-                        {featuredPlaylists.map(item => (
-                          <FeaturedPlaylistsItems item={item} key={item.id} />
-                        ))}
-                      </ul>
-                    )}
-                  </>
-                )}
-              </div>
-              <div data-testid="loader">
-                <h1 className="headings">Genres & Moods</h1>
-                {isLoading ? (
-                  <Loading />
-                ) : (
-                  <>
-                    {error2 !== null ? (
-                      <HomeFailuar getData={this.getGenreAndMoodsData} />
-                    ) : (
-                      <ul className="list-item-container">
-                        {categoriesList.map(item => (
-                          <CategoriesListItems item={item} key={item.id} />
-                        ))}
-                      </ul>
-                    )}
-                  </>
-                )}
-              </div>
-              <div data-testid="loader">
-                <h1 className="headings">New releases</h1>
-                {isLoading ? (
-                  <Loading />
-                ) : (
-                  <>
-                    {error3 !== null ? (
-                      <HomeFailuar getData={this.getNewReleasesData} />
-                    ) : (
-                      <ul className="list-item-container">
-                        {newReleasesList.map(item => (
-                          <NewReleasesListItems item={item} key={item.id} />
-                        ))}
-                      </ul>
-                    )}
-                  </>
-                )}
-              </div>
-            </div>
-          </>
-        )}
+      <>
+        {isLoadingEditorsPick ? <Loading /> : this.renderEditorsPicksList()}
+        {isLoadingCategories ? <Loading /> : this.renderGenresAndMoodList()}
+        {isLoadingNewReleases ? <Loading /> : this.renderNewReleasesList()}
+      </>
+    )
+  }
+
+  render() {
+    const jwtToken = Cookies.get('jwt_token')
+    if (jwtToken === undefined) {
+      return <Redirect to="/login" />
+    }
+    return (
+      <div data-testid="homeBgContainer" className="home-bg-container">
+        <Navbar />
+        <div className="container" data-testid="container">
+          {this.renderHomeView()}
+        </div>
       </div>
     )
   }
