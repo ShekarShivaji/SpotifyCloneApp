@@ -2,8 +2,11 @@ import './index.css'
 
 const HomeFailuar = props => {
   const {getData} = props
+  const onClickCallFunction = () => {
+    getData()
+  }
   return (
-    <div className="home-failuar-container">
+    <div className="home-failuar-container" data-testid="homeFailuarContainer">
       <img
         className="failuar-img"
         src="https://res.cloudinary.com/dqkjtjb9x/image/upload/v1740982653/Icon_oxsmym.png"
@@ -12,10 +15,10 @@ const HomeFailuar = props => {
       <p className="failuar-text">Something went wrong. Please try again</p>
       <button
         type="button"
-        onClick={() => getData()}
+        onClick={onClickCallFunction}
         className="failuar-button"
       >
-        Try Again
+        Try again
       </button>
     </div>
   )

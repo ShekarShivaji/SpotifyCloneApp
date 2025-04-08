@@ -1,7 +1,7 @@
 import './index.css'
 import {Component} from 'react'
+import {withRouter, Redirect} from 'react-router-dom'
 import Cookies from 'js-cookie'
-import {Redirect} from 'react-router-dom'
 
 class LoginRoute extends Component {
   state = {
@@ -21,17 +21,16 @@ class LoginRoute extends Component {
 
   onSubmitSuccess = jwtToken => {
     const {history} = this.props
-    Cookies.set('jwt_token', jwtToken, {expires: 30, path: '/'})
+    Cookies.set('jwt_token', jwtToken, {expires: 30})
     history.replace('/')
   }
 
   onSubmitFailuar = errorMSg => {
-    console.log(errorMSg)
     this.setState({errorMSg, showSubmitError: true})
   }
 
-  submitForm = async event => {
-    event.preventDefault()
+  submitForm = async Event => {
+    Event.preventDefault()
     const {username, password} = this.state
     const userDetails = {username, password}
     const url = 'https://apis.ccbp.in/login'
@@ -91,26 +90,27 @@ class LoginRoute extends Component {
       return <Redirect to="/" />
     }
     return (
-      <div className="login-form-container" data-testid="loginFormContainer">
-        <form className="form-container" onSubmit={this.submitForm}>
+      <div className="login-form-container">
+        <div className="form-container">
           <img
             src="https://res.cloudinary.com/dqkjtjb9x/image/upload/v1740494566/Vector_anoy5d.png"
             className="login-website-logo-image"
             alt="login website logo"
           />
           <h1 className="spotify-heading">Spotify Remix</h1>
-          <div>
+          <form onSubmit={this.submitForm} className="form-container">
             <div className="input-container">{this.renderUserField()}</div>
             <div className="input-container">{this.renderPasswordField()}</div>
-          </div>
-          <button type="submit" className="login-button">
-            LOGIN
-          </button>
+            <button type="submit" className="login-button">
+              LOGIN
+            </button>
+          </form>
+
           {showSubmitError && <p className="error-msg">* {errorMSg}</p>}
-        </form>
+        </div>
       </div>
     )
   }
 }
 
-export default LoginRoute
+export default withRouter(LoginRoute)

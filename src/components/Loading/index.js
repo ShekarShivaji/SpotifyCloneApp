@@ -1,7 +1,7 @@
 import './index.css'
 
 const Loading = () => (
-  <div className="home-loading-container">
+  <div className="home-loading-container" data-testid="loader">
     <img
       src="https://res.cloudinary.com/dqkjtjb9x/image/upload/v1740494566/Vector_anoy5d.png"
       alt="logo"

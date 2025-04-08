@@ -33,7 +33,7 @@ class HomeRoute extends Component {
     const {items} = playlists
     const updatedData = items.map(item => ({
       name: item.name,
-      image: item.images[0].url,
+      images: item.images,
       id: item.id,
     }))
     return updatedData
@@ -44,7 +44,7 @@ class HomeRoute extends Component {
     const {items} = categories
     const updatedData = items.map(item => ({
       name: item.name,
-      icon: item.icons[0].url,
+      icons: item.icons,
       id: item.id,
     }))
     return updatedData
@@ -55,7 +55,7 @@ class HomeRoute extends Component {
     const {items} = albums
     const updatedData = items.map(item => ({
       name: item.name,
-      image: item.images[0].url,
+      images: item.images,
       id: item.id,
     }))
     return updatedData
@@ -142,55 +142,56 @@ class HomeRoute extends Component {
 
   renderEditorsPicksList = () => {
     const {featuredPlaylists, error1} = this.state
+
     return (
-      <>
-        <h1 className="headings">Editor&apos;s picks</h1>
+      <div>
+        <h1 className="headings">Editors Picks</h1>
         {error1 ? (
           <HomeFailuar getData={this.getEditorsPickData} />
         ) : (
-          <ul className="list-item-container">
+          <ul className="list-item-container" data-testid="listItemContainer">
             {featuredPlaylists.map(item => (
               <FeaturedPlaylistsItems item={item} key={item.id} />
             ))}
           </ul>
         )}
-      </>
+      </div>
     )
   }
 
   renderGenresAndMoodList = () => {
     const {categoriesList, error2} = this.state
     return (
-      <>
+      <div>
         <h1 className="headings">Genres & Moods</h1>
         {error2 ? (
           <HomeFailuar getData={this.getGenreAndMoodsData} />
         ) : (
-          <ul className="list-item-container">
+          <ul className="list-item-container" data-testid="listItemContainer">
             {categoriesList.map(item => (
               <CategoriesListItems item={item} key={item.id} />
             ))}
           </ul>
         )}
-      </>
+      </div>
     )
   }
 
   renderNewReleasesList = () => {
     const {newReleasesList, error3} = this.state
     return (
-      <>
+      <div>
         <h1 className="headings">New releases</h1>
         {error3 ? (
           <HomeFailuar getData={this.getNewReleasesData} />
         ) : (
-          <ul className="list-item-container">
+          <ul className="list-item-container" data-testid="listItemContainer">
             {newReleasesList.map(item => (
               <NewReleasesListItems item={item} key={item.id} />
             ))}
           </ul>
         )}
-      </>
+      </div>
     )
   }
 
@@ -215,11 +216,9 @@ class HomeRoute extends Component {
       return <Redirect to="/login" />
     }
     return (
-      <div data-testid="homeBgContainer" className="home-bg-container">
+      <div className="home-bg-container" data-testid="homeBgContainer">
         <Navbar />
-        <div className="container" data-testid="container">
-          {this.renderHomeView()}
-        </div>
+        <div className="container">{this.renderHomeView()}</div>
       </div>
     )
   }

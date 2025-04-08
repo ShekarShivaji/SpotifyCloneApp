@@ -51,7 +51,6 @@ class AlbumDetailsRoute extends Component {
         type: data.type,
         uri: data.uri,
       }
-      console.log(updatedInfo)
 
       const updatedData = data.tracks.items.map(item => ({
         artists: item.artists,

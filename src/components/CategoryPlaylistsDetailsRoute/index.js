@@ -22,9 +22,9 @@ class CategoryPlaylistsDetailsRoute extends Component {
 
     const {match} = this.props
     const {params} = match
-    const {categoryId} = params
+    const {id} = params
 
-    const genreListApiUrl = `https://apis2.ccbp.in/spotify-clone/category-playlists/${categoryId}`
+    const genreListApiUrl = `https://apis2.ccbp.in/spotify-clone/category-playlists/${id}`
     const genreListOptions = {
       headers: {
         Authorization: `Bearer ${token}`,

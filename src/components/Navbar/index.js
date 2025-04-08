@@ -1,5 +1,5 @@
 import './index.css'
-import {withRouter, Link} from 'react-router-dom'
+import {withRouter} from 'react-router-dom'
 import {IoMdLogOut} from 'react-icons/io'
 import Cookies from 'js-cookie'
 
@@ -12,13 +12,12 @@ const Navbar = props => {
 
   return (
     <nav className="nav-container">
-      <Link to="/">
-        <img
-          alt="website logo"
-          src="https://res.cloudinary.com/dqkjtjb9x/image/upload/v1740494566/Vector_anoy5d.png"
-          className="logo-img"
-        />
-      </Link>
+      <img
+        alt="website logo"
+        src="https://res.cloudinary.com/dqkjtjb9x/image/upload/v1740494566/Vector_anoy5d.png"
+        className="logo-img"
+      />
+
       <ul style={{marginRight: '20px'}}>
         <li style={{listStyleType: 'none', display: 'flex'}}>
           <button onClick={logutButton} type="button" className="logout-button">

@@ -22,20 +22,19 @@ const App = () => (
             Cookies.get('jwt_token') ? <HomeRoute /> : <Redirect to="/login" />
           }
         />
-
         <ProtectedRoutes
           exact
-          path="/playlists-details/:id"
+          path="/playlist/:id"
           component={SpecificPlaylistDetailsRoute}
         />
         <ProtectedRoutes
           exact
-          path="/category-playlists/:categoryId"
+          path="/category/:id/playlists"
           component={CategoryPlaylistsDetailsRoute}
         />
         <ProtectedRoutes
           exact
-          path="/new-releases/album/:id"
+          path="/album/:id"
           component={AlbumDetailsRoute}
         />
         <Route path="/bad-path" component={NotFound} />

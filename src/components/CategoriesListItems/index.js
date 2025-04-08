@@ -3,13 +3,23 @@ import {Link} from 'react-router-dom'
 
 const CategoriesListItems = props => {
   const {item} = props
-  const {icon, id} = item
+  const {icons, id} = item
+  let icon
+
+  if (icons !== undefined) {
+    icon = icons.reduce((prev, curr) =>
+      prev.height > curr.height ? prev : curr,
+    )
+    icon = icon.url
+  } else {
+    icon = null
+  }
   return (
-    <li className="genres-moods-item">
-      <Link to={`/category-playlists/${id}`}>
+    <Link to={`/category/${id}/playlists`}>
+      <li className="genres-moods-item" data-testid="genresMoodsItem">
         <img src={icon} alt="category" className="genres-moods-item-image" />
-      </Link>
-    </li>
+      </li>
+    </Link>
   )
 }
 

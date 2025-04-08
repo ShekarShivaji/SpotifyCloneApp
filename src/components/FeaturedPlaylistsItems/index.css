@@ -2,7 +2,7 @@
   list-style-type: none;
   text-decoration: none;
 }
-.playlistItem {
+.play-list-item {
   display: flex;
   flex-direction: column;
   align-items: center;
