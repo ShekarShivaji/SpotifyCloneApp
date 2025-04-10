@@ -1,5 +1,6 @@
 import './App.css'
 import {Redirect, Switch, Route} from 'react-router-dom'
+import Cookies from 'js-cookie'
 import LoginRoute from './components/LoginRoute'
 import ProtectedRoutes from './components/ProtectedRoutes'
 import HomeRoute from './components/HomeRoute'
@@ -12,7 +13,13 @@ import AlbumDetailsRoute from './components/AlbumDetailsRoute'
 const App = () => (
   <Switch>
     <Route exact path="/login" component={LoginRoute} />
-    <ProtectedRoutes exact path="/" component={HomeRoute} />
+    <Route
+      exact
+      path="/"
+      render={() =>
+        Cookies.get('jwt_token') ? <HomeRoute /> : <Redirect to="/login" />
+      }
+    />
     <ProtectedRoutes
       exact
       path="/playlist/:id"
