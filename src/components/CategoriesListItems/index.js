@@ -15,11 +15,11 @@ const CategoriesListItems = props => {
     icon = null
   }
   return (
-    <Link to={`/category/${id}/playlists`}>
-      <li className="genres-moods-item" data-testid="genresMoodsItem">
+    <li className="genres-moods-item">
+      <Link to={`/category/${id}/playlists`}>
         <img src={icon} alt="category" className="genres-moods-item-image" />
-      </li>
-    </Link>
+      </Link>
+    </li>
   )
 }
 

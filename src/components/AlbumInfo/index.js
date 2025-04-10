@@ -28,7 +28,7 @@ const AlbumInfo = props => {
   return (
     <div className="album-info">
       <img src={image} alt={albumName} className="album-image" />
-      <div className="section-name">
+      <div className="section-name" data-testid="sectionName">
         <p className="section">{section}</p>
         <h1 className="album-display-name">{albumName}</h1>
       </div>

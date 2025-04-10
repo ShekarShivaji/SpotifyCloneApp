@@ -80,7 +80,7 @@ class SpecificPlaylistDetailsRoute extends Component {
     <div className="loading-view">
       <img
         src="https://res.cloudinary.com/dqkjtjb9x/image/upload/v1740494566/Vector_anoy5d.png"
-        alt="website logo"
+        alt="logo"
         className="logo-img"
       />
       <h1 className="loading-text">Loading...</h1>
@@ -90,17 +90,22 @@ class SpecificPlaylistDetailsRoute extends Component {
   render() {
     const {isLoading, displayInfo, musicList} = this.state
     return (
-      <div className="home-bg-container">
-        {isLoading ? (
-          this.renderLodingView()
-        ) : (
-          <Player
-            displayInfo={displayInfo}
-            section="Editor's pick's"
-            musicList={musicList}
-          />
-        )}
-      </div>
+      <>
+        <div
+          className="specific-bg-container"
+          data-testid="specific-bg-container"
+        >
+          {isLoading ? (
+            this.renderLodingView()
+          ) : (
+            <Player
+              displayInfo={displayInfo}
+              section="Editor's pick's"
+              musicList={musicList}
+            />
+          )}
+        </div>
+      </>
     )
   }
 }

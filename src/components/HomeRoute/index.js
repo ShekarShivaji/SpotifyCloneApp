@@ -9,14 +9,18 @@ import CategoriesListItems from '../CategoriesListItems/index'
 import NewReleasesListItems from '../NewReleasesListItems/index'
 import Loading from '../Loading/index'
 
+const apiStatusConstants = {
+  initial: 'INITIAL',
+  success: 'SUCCESS',
+  failure: 'FAILURE',
+  inProgress: 'IN_PROGRESS',
+}
+
 class HomeRoute extends Component {
   state = {
-    isLoadingEditorsPick: true,
-    isLoadingCategories: true,
-    isLoadingNewReleases: true,
-    error1: null,
-    error2: null,
-    error3: null,
+    isLoadingEditorsPick: apiStatusConstants.initial,
+    isLoadingCategories: apiStatusConstants.initial,
+    isLoadingNewReleases: apiStatusConstants.initial,
     featuredPlaylists: [],
     categoriesList: [],
     newReleasesList: [],
@@ -62,7 +66,7 @@ class HomeRoute extends Component {
   }
 
   getEditorsPickData = async () => {
-    this.setState({isLoadingEditorsPick: true})
+    this.setState({isLoadingEditorsPick: apiStatusConstants.inProgress})
     const jwtToken = Cookies.get('jwt_token')
     const options = {
       headers: {
@@ -70,25 +74,28 @@ class HomeRoute extends Component {
       },
       method: 'GET',
     }
-    try {
-      const response1 = await fetch(
-        'https://apis2.ccbp.in/spotify-clone/featured-playlists',
-        options,
-      )
-      if (response1.ok === true) {
-        const data1 = await response1.json()
-        this.setState({
-          featuredPlaylists: this.updateData1(data1),
-          isLoadingEditorsPick: false,
-        })
-      }
-    } catch (error1) {
-      this.setState({error1, isLoadingEditorsPick: false})
+
+    const response1 = await fetch(
+      'https://apis2.ccbp.in/spotify-clone/featured-playlists',
+      options,
+    )
+    if (response1.ok === true) {
+      const data1 = await response1.json()
+      this.setState({
+        featuredPlaylists: this.updateData1(data1),
+        isLoadingEditorsPick: apiStatusConstants.success,
+      })
+    }
+
+    if (response1.status === 401) {
+      this.setState({
+        isLoadingEditorsPick: apiStatusConstants.failure,
+      })
     }
   }
 
   getGenreAndMoodsData = async () => {
-    this.setState({isLoadingCategories: true})
+    this.setState({isLoadingCategories: apiStatusConstants.inProgress})
     const jwtToken = Cookies.get('jwt_token')
     const options = {
       headers: {
@@ -96,25 +103,28 @@ class HomeRoute extends Component {
       },
       method: 'GET',
     }
-    try {
-      const response2 = await fetch(
-        'https://apis2.ccbp.in/spotify-clone/categories',
-        options,
-      )
-      if (response2.ok === true) {
-        const data2 = await response2.json()
-        this.setState({
-          categoriesList: this.updateData2(data2),
-          isLoadingCategories: false,
-        })
-      }
-    } catch (error2) {
-      this.setState({error2, isLoadingCategories: false})
+
+    const response2 = await fetch(
+      'https://apis2.ccbp.in/spotify-clone/categories',
+      options,
+    )
+    if (response2.ok === true) {
+      const data2 = await response2.json()
+      this.setState({
+        categoriesList: this.updateData2(data2),
+        isLoadingCategories: apiStatusConstants.success,
+      })
+    }
+
+    if (response2.status === 401) {
+      this.setState({
+        isLoadingCategories: apiStatusConstants.failure,
+      })
     }
   }
 
   getNewReleasesData = async () => {
-    this.setState({isLoadingNewReleases: true})
+    this.setState({isLoadingNewReleases: apiStatusConstants.inProgress})
     const jwtToken = Cookies.get('jwt_token')
     const options = {
       headers: {
@@ -122,91 +132,100 @@ class HomeRoute extends Component {
       },
       method: 'GET',
     }
-    try {
-      const response3 = await fetch(
-        'https://apis2.ccbp.in/spotify-clone/new-releases',
-        options,
-      )
 
-      if (response3.ok === true) {
-        const data3 = await response3.json()
-        this.setState({
-          newReleasesList: this.updateData3(data3),
-          isLoadingNewReleases: false,
-        })
-      }
-    } catch (error3) {
-      this.setState({error3, isLoadingNewReleases: false})
+    const response3 = await fetch(
+      'https://apis2.ccbp.in/spotify-clone/new-releases',
+      options,
+    )
+
+    if (response3.ok === true) {
+      const data3 = await response3.json()
+      this.setState({
+        newReleasesList: this.updateData3(data3),
+        isLoadingNewReleases: apiStatusConstants.success,
+      })
+    }
+
+    if (response3.status === 401) {
+      this.setState({
+        isLoadingNewReleases: apiStatusConstants.failure,
+      })
+    }
+  }
+
+  renderEditorsPicksView = () => {
+    const {isLoadingEditorsPick} = this.state
+    switch (isLoadingEditorsPick) {
+      case apiStatusConstants.success:
+        return this.renderEditorsPicksList()
+      case apiStatusConstants.failure:
+        return <HomeFailuar getData={this.getEditorsPickData} />
+      case apiStatusConstants.inProgress:
+        return <Loading />
+      default:
+        return null
     }
   }
 
   renderEditorsPicksList = () => {
-    const {featuredPlaylists, error1} = this.state
+    const {featuredPlaylists} = this.state
 
     return (
-      <div>
-        <h1 className="headings">Editors Picks</h1>
-        {error1 ? (
-          <HomeFailuar getData={this.getEditorsPickData} />
-        ) : (
-          <ul className="list-item-container" data-testid="listItemContainer">
-            {featuredPlaylists.map(item => (
-              <FeaturedPlaylistsItems item={item} key={item.id} />
-            ))}
-          </ul>
-        )}
-      </div>
+      <ul className="list-item-container">
+        {featuredPlaylists.map(item => (
+          <FeaturedPlaylistsItems item={item} key={item.id} />
+        ))}
+      </ul>
     )
+  }
+
+  renderGenresAndMoodView = () => {
+    const {isLoadingCategories} = this.state
+    switch (isLoadingCategories) {
+      case apiStatusConstants.success:
+        return this.renderGenresAndMoodList()
+      case apiStatusConstants.failure:
+        return <HomeFailuar getData={this.getGenreAndMoodsData} />
+      case apiStatusConstants.inProgress:
+        return <Loading />
+      default:
+        return null
+    }
   }
 
   renderGenresAndMoodList = () => {
-    const {categoriesList, error2} = this.state
+    const {categoriesList} = this.state
     return (
-      <div>
-        <h1 className="headings">Genres & Moods</h1>
-        {error2 ? (
-          <HomeFailuar getData={this.getGenreAndMoodsData} />
-        ) : (
-          <ul className="list-item-container" data-testid="listItemContainer">
-            {categoriesList.map(item => (
-              <CategoriesListItems item={item} key={item.id} />
-            ))}
-          </ul>
-        )}
-      </div>
+      <ul className="list-item-container">
+        {categoriesList.map(item => (
+          <CategoriesListItems item={item} key={item.id} />
+        ))}
+      </ul>
     )
+  }
+
+  renderNewReleasesView = () => {
+    const {isLoadingNewReleases} = this.state
+    switch (isLoadingNewReleases) {
+      case apiStatusConstants.success:
+        return this.renderNewReleasesList()
+      case apiStatusConstants.failure:
+        return <HomeFailuar getData={this.getNewReleasesData} />
+      case apiStatusConstants.inProgress:
+        return <Loading />
+      default:
+        return null
+    }
   }
 
   renderNewReleasesList = () => {
-    const {newReleasesList, error3} = this.state
+    const {newReleasesList} = this.state
     return (
-      <div>
-        <h1 className="headings">New releases</h1>
-        {error3 ? (
-          <HomeFailuar getData={this.getNewReleasesData} />
-        ) : (
-          <ul className="list-item-container" data-testid="listItemContainer">
-            {newReleasesList.map(item => (
-              <NewReleasesListItems item={item} key={item.id} />
-            ))}
-          </ul>
-        )}
-      </div>
-    )
-  }
-
-  renderHomeView = () => {
-    const {
-      isLoadingEditorsPick,
-      isLoadingCategories,
-      isLoadingNewReleases,
-    } = this.state
-    return (
-      <>
-        {isLoadingEditorsPick ? <Loading /> : this.renderEditorsPicksList()}
-        {isLoadingCategories ? <Loading /> : this.renderGenresAndMoodList()}
-        {isLoadingNewReleases ? <Loading /> : this.renderNewReleasesList()}
-      </>
+      <ul className="list-item-container">
+        {newReleasesList.map(item => (
+          <NewReleasesListItems item={item} key={item.id} />
+        ))}
+      </ul>
     )
   }
 
@@ -215,10 +234,18 @@ class HomeRoute extends Component {
     if (jwtToken === undefined) {
       return <Redirect to="/login" />
     }
+
     return (
       <div className="home-bg-container" data-testid="homeBgContainer">
         <Navbar />
-        <div className="container">{this.renderHomeView()}</div>
+        <div className="container" data-testid="container">
+          <h1 className="headings">Editors Picks</h1>
+          {this.renderEditorsPicksView()}
+          <h1 className="headings">Genres & Moods</h1>
+          {this.renderGenresAndMoodView()}
+          <h1 className="headings">New releases</h1>
+          {this.renderNewReleasesView()}
+        </div>
       </div>
     )
   }

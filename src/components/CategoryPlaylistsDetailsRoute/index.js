@@ -76,7 +76,7 @@ class CategoryPlaylistsDetailsRoute extends Component {
     <div className="loading-view">
       <img
         src="https://res.cloudinary.com/dqkjtjb9x/image/upload/v1740494566/Vector_anoy5d.png"
-        alt="website logo"
+        alt="logo"
         className="logo-img"
       />
       <h1 className="loading-text">Loading...</h1>
@@ -93,7 +93,10 @@ class CategoryPlaylistsDetailsRoute extends Component {
 
     return (
       <>
-        <div className="home-bg-container">
+        <div
+          className="category-bg-container"
+          data-testid="categoryBgContainer"
+        >
           <Navbar />
           <div className="container">
             <button
