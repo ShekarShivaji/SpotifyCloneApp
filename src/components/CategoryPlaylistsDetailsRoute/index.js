@@ -61,14 +61,14 @@ class CategoryPlaylistsDetailsRoute extends Component {
     const {genreListData} = this.state
 
     return (
-      <>
+      <div className="category-bg-container">
         <h1 className="category-heading">Podcast</h1>
         <ul className="genre-list-container">
           {genreListData.map(item => (
             <GenreCategoryItem genreListItem={item} key={item.id} />
           ))}
         </ul>
-      </>
+      </div>
     )
   }
 

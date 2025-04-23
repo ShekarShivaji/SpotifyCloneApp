@@ -19,23 +19,11 @@ const Navbar = props => {
           className="logo-img"
         />
       </Link>
-      <li>Home</li>
-      <li>Home</li>
-      <li>Home</li>
-      <li>Home</li>
-      <li>Home</li>
-      <li>Home</li>
-      <li>Home</li>
-      <li>Home</li>
-      <li>Home</li>
-      <li>Home</li>
-      <li>Home</li>
-      <li style={{listStyleType: 'none', display: 'flex'}}>
-        <button onClick={logutButton} type="button" className="logout-button">
-          <IoMdLogOut size="25" />
-          Logout
-        </button>
-      </li>
+
+      <button onClick={logutButton} type="button" className="logout-button">
+        <IoMdLogOut size="25" />
+        Logout
+      </button>
     </nav>
   )
 }

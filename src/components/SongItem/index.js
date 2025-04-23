@@ -40,18 +40,14 @@ const SongItem = props => {
   return (
     <li className={`song-row ${activeSongClass}`} onClick={onClickSelectSong}>
       <img src={image} alt="album" className="song-thumbnail" />
-      <div id="song-info">
-        <div className="song-info-md">
-          <span className="song-name-md">{name}</span>
-          <span className="artist-name-md">
-            {artists ? artists[0].name : 'Artist'}
-          </span>
-        </div>
-        <span id="song-name">{name}</span>
-        <span id="album-name">{album ? album.name : '(Album?)'}</span>
-        <span id="duration">{getDurationTime(durationMs)}</span>
-        <span id="artist-name">{artists ? artists[0].name : 'Artist'}</span>
-        <span id="added">
+      <div className="song-info">
+        <span className="song-name">{name}</span>
+        <span className="artist-name">
+          {artists ? artists[0].name : 'Artist'}
+        </span>
+        <span className="album-name">{album ? album.name : '(Album?)'}</span>
+        <span className="duration">{getDurationTime(durationMs)}</span>
+        <span className="added">
           {album
             ? getFormaDistance(album.release_date)
             : getFormaDistance(displayInfo.releaseDate)}

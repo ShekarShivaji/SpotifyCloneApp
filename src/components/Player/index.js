@@ -12,7 +12,6 @@ import Navbar from '../Navbar/index'
 class Player extends Component {
   state = {
     ...this.props,
-    screenSize: window.innerWidth,
     activeSongClass: 0,
     index: 0,
     pause: false,
@@ -32,11 +31,6 @@ class Player extends Component {
     this.playerRef.removeEventListener('timeupdate', this.timeUpdate)
     this.playerRef.removeEventListener('ended', this.nextSong)
     this.playerRef.removeEventListener('volumechange', this.adjustVolume)
-    window.removeEventListener('resize', this.resize)
-  }
-
-  resize = () => {
-    this.setState({screenSize: window.innerWidth})
   }
 
   getArtistName = artist => {
@@ -350,12 +344,12 @@ class Player extends Component {
   }
 
   render() {
-    const {displayInfo, section, screenSize} = this.state
+    const {displayInfo, section} = this.state
     return (
       <>
         <Navbar />
         <div className="container">
-          <div className="categoriesSection">
+          <div className="category-bg-container">
             <button
               type="button"
               onClick={this.onClickBackbtn}
@@ -368,21 +362,20 @@ class Player extends Component {
             </button>
 
             <AlbumInfo displayInfo={displayInfo} section={section} />
-            {screenSize >= 767 && (
-              <div id="columns-row" className="displayInfoHeadings">
-                <span id="column-name">Track</span>
-                <span id="column-name">Album</span>
-                <span id="column-name">Time</span>
-                <span id="column-name">Artist</span>
-                <span id="column-name">Added</span>
-              </div>
-            )}
+            <div id="columns-row" className="displayInfoHeadings">
+              <span id="column-name">Track</span>
+              <span id="column-name">Album</span>
+              <span id="column-name">Time</span>
+              <span id="column-name">Artist</span>
+              <span id="column-name">Added</span>
+            </div>
             <hr style={{width: '95%', border: '1px solid #475569'}} />
             <ul className="playlist">{this.renderSongslist()}</ul>
-            <div className="music-controlers">
-              {screenSize >= 768
-                ? this.renderMusicControlDesktopView()
-                : this.renderMusicControlsMobileView()}
+            <div className="music-controlers-desktop-view">
+              {this.renderMusicControlDesktopView()}
+            </div>
+            <div className="music-controlers-mobile-view">
+              {this.renderMusicControlsMobileView()}
             </div>
           </div>
         </div>

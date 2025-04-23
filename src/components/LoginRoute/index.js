@@ -25,7 +25,7 @@ class LoginRoute extends Component {
     history.replace('/')
   }
 
-  onSubmitFailuar = errorMSg => {
+  onSubmitFailure = errorMSg => {
     this.setState({errorMSg, showSubmitError: true})
   }
 
@@ -43,7 +43,7 @@ class LoginRoute extends Component {
     if (response.ok === true) {
       this.onSubmitSuccess(data.jwt_token)
     } else {
-      this.onSubmitFailuar(data.error_msg)
+      this.onSubmitFailure(data.error_msg)
     }
   }
 

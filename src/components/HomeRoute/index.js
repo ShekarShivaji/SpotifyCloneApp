@@ -87,7 +87,7 @@ class HomeRoute extends Component {
       })
     }
 
-    if (response1.status === 401) {
+    if (!response1.ok) {
       this.setState({
         isLoadingEditorsPick: apiStatusConstants.failure,
       })
@@ -116,7 +116,7 @@ class HomeRoute extends Component {
       })
     }
 
-    if (response2.status === 401) {
+    if (!response2.ok) {
       this.setState({
         isLoadingCategories: apiStatusConstants.failure,
       })
@@ -146,7 +146,7 @@ class HomeRoute extends Component {
       })
     }
 
-    if (response3.status === 401) {
+    if (!response3.ok) {
       this.setState({
         isLoadingNewReleases: apiStatusConstants.failure,
       })
@@ -171,7 +171,7 @@ class HomeRoute extends Component {
     const {featuredPlaylists} = this.state
 
     return (
-      <ul className="list-item-container">
+      <ul className="list-item-container" data-testid="featuredPlaylists">
         {featuredPlaylists.map(item => (
           <FeaturedPlaylistsItems item={item} key={item.id} />
         ))}
@@ -196,7 +196,7 @@ class HomeRoute extends Component {
   renderGenresAndMoodList = () => {
     const {categoriesList} = this.state
     return (
-      <ul className="list-item-container">
+      <ul className="list-item-container" data-testid="categoriesList">
         {categoriesList.map(item => (
           <CategoriesListItems item={item} key={item.id} />
         ))}
@@ -221,7 +221,7 @@ class HomeRoute extends Component {
   renderNewReleasesList = () => {
     const {newReleasesList} = this.state
     return (
-      <ul className="list-item-container">
+      <ul className="list-item-container" data-testid="newReleasesList">
         {newReleasesList.map(item => (
           <NewReleasesListItems item={item} key={item.id} />
         ))}
